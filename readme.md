@@ -117,3 +117,9 @@ Send Email Notification
    │
    ▼
 End
+
+---
+
+Dokcer installtion command
+
+docker run -it --name pipeline_test -v "${PWD}:/opt/spark/work" -w /opt/spark/work apache/spark:3.5.0 bash
