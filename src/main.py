@@ -13,14 +13,21 @@ spark = SparkSession.builder \
 # Read Raw CSV
 # --------------------------------------------
 
+raw_data_path = "data/raw/"
+
 df = spark.read \
-    .option("header", True) \
-    .option("inferSchema", True) \
-    .csv("./data/raw/ecommerce_sales_data.csv")
+    .format("csv") \
+    .option("header", "true") \
+    .option("inferSchema", "true") \
+    .load(raw_data_path)
 
 print("Raw Data")
 df.show(5)
 df.printSchema()
+
+# This calculates the count and explicitly prints it out
+row_count = df.count()
+print(f"Total row count: {row_count}")
 
 # --------------------------------------------
 # Bronze Layer

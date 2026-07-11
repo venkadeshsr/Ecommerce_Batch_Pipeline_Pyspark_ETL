@@ -84,3 +84,36 @@ Silver
                      │
                      ▼
                   Gold Layer
+
+----
+
+Implement Airflow and move on to real time projects
+
+Start
+   │
+   ▼
+Check File Exists
+   │
+   ▼
+Archive Previous Raw File
+   │
+   ▼
+Bronze
+   │
+   ▼
+Data Quality Check
+   │
+   ▼
+Silver
+   │
+   ▼
+Gold
+   │
+   ▼
+Generate Report
+   │
+   ▼
+Send Email Notification
+   │
+   ▼
+End
