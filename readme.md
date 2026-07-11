@@ -55,3 +55,32 @@ A common pipeline is:
 8–10 Gold tables (aggregated reporting datasets)
 
 This is a standard ETL design used in data engineering projects, where the Silver layer acts as the source for multiple reporting-ready Gold datasets.
+
+///
+
+End to End flow : (As per Code)
+
+orders.csv
+      │
+      ▼
+Read CSV
+      │
+      ▼
+Bronze
+      │
+      ▼
+Clean Data
+      │
+      ▼
+Silver
+      │
+      ├─────────────► Sales by Date
+      │
+      ├─────────────► Sales by Product
+      │
+      ├─────────────► Sales by Category
+      │
+      └─────────────► Sales by Region
+                     │
+                     ▼
+                  Gold Layer
