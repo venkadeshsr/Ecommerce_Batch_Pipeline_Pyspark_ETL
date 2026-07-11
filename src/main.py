@@ -23,7 +23,7 @@ df.write.mode("overwrite").parquet("data/bronze/orders")
 
 # Read Bronze
 
-bronze_df = spark.read.parquet("bronze/orders")
+bronze_df = spark.read.parquet("./data/bronze/orders")
 
 # Silver Layer (Cleaning)
 
@@ -68,10 +68,7 @@ silver_df = silver_df.withColumn(
 
 # save silver layer
 
-silver_df = silver_df.withColumn(
-    "Profit Margin",
-    round(col("Profit") / col("Sales"), 2)
-)
+silver_df.write.mode("overwrite").parquet("silver/orders")
 
 # Stop Spark Session
 
