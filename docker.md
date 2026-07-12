@@ -17,3 +17,13 @@ docker rm -f dynamic_pipeline
 
 # 2. Run your command again to create the fresh container and jump inside
 docker run -it --name dynamic_pipeline -v "${PWD}:/opt/spark/work" my_custom_spark:latest bash
+
+---
+
+docker compose down to stop the container
+
+---
+
+Deleting the unused image
+
+docker system prune -a --volumes -f
