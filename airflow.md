@@ -13,3 +13,9 @@ docker compose up -d
 Airflow password seeing
 
 docker exec -it airflow_scheduler cat /opt/airflow/standalone_admin_password.txt
+
+---
+
+DAG Sync immediately
+
+docker exec -it Airflow airflow dags reserialize

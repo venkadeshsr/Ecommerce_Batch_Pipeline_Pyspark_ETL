@@ -24,7 +24,7 @@ with DAG(
     run_pipeline = BashOperator(
         task_id='execute_pyspark_etl',
         # NOTE: Replace 'your_script_name.py' with the actual name of your execution file
-        bash_command='docker exec -i dynamic_pipeline python /opt/spark/work/src/generate_sales_data.py',
+        bash_command='docker exec -i ETL_Spark python /opt/spark/work/src/generate_sales_data.py',
     )
 
     run_pipeline
