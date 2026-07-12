@@ -50,8 +50,9 @@ def archive_raw_files(raw_dir: Path, archive_root: Path) -> List[str]:
 
     for raw_file in sorted(raw_dir.glob("*.csv")):
         destination_path = ensure_unique_path(destination_dir / raw_file.name)
-        shutil.move(str(raw_file), str(destination_path))
+        shutil.copy2(str(raw_file), str(destination_path))
         archived_files.append(str(destination_path.relative_to(get_project_root())))
+        raw_file.unlink()
 
     return archived_files
 
@@ -70,7 +71,7 @@ def archive_report_folders(gold_dir: Path, archive_root: Path) -> List[str]:
             continue
 
         destination_dir = ensure_unique_path(destination_root / report_dir.name)
-        shutil.move(str(report_dir), str(destination_dir))
+        shutil.copytree(str(report_dir), str(destination_dir), dirs_exist_ok=False)
         archived_folders.append(str(destination_dir.relative_to(get_project_root())))
 
     return archived_folders
