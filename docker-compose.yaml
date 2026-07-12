@@ -1,12 +1,19 @@
+version: '3.8'
+
 services:
   spark:
-    container_name: dynamic_pipeline
-    image: apache/spark:3.5.0 # (Or whatever spark image you are using)
-    # ... your existing spark configuration lines ...
+    build: .
+    image: etl_spark:latest
+    container_name: ETL_Spark
+    volumes:
+      - .:/opt/spark/work
+    # Keep the container alive so Airflow can trigger scripts inside it
+    tty: true 
+    stdin_open: true
 
   airflow:
     image: apache/airflow:2.10.2-python3.10
-    container_name: airflow_scheduler
+    container_name: Airflow
     environment:
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
     volumes:
