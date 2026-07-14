@@ -46,7 +46,6 @@ Raw CSV -> Bronze -> Silver -> Gold -> PostgreSQL
 
 ## Documentation
 
-- [docs/README.md](docs/README.md)
 - [docs/project_setup.md](docs/project_setup.md)
 - [docs/spark.md](docs/spark.md)
 - [docs/airflow.md](docs/airflow.md)
