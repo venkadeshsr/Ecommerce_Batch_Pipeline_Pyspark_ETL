@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  postgres:
+    build: ./postgress
+    container_name: ETL_Postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-change_me}
+      - POSTGRES_DB=sales_db
+    ports:
+      - "55432:5432"
+    networks:
+      - etl_network
+
+  spark:
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    image: etl_spark:latest
+    container_name: ETL_Spark
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-change_me}
+    volumes:
+      - .:/opt/spark/work
+    command: ["tail", "-f", "/dev/null"]
+    networks:
+      - etl_network
+    depends_on:
+      - postgres
+
+  airflow:
+    image: apache/airflow:2.10.2-python3.10
+    container_name: Airflow
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - .:/opt/spark/work
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8080:8080"
+    command: standalone
+    networks:
+      - etl_network
+    depends_on:
+      - postgres
+
+networks:
+  etl_network:
+    driver: bridge
