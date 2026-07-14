@@ -1,3 +1,5 @@
+import os
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 
@@ -7,6 +9,7 @@ from pyspark.sql.functions import *
 
 spark = SparkSession.builder \
     .appName("Sales Reporting Pipeline") \
+    .config("spark.jars", "/opt/spark/jars/postgresql-42.7.4.jar") \
     .getOrCreate()
 
 # --------------------------------------------
@@ -93,6 +96,30 @@ sales_by_date.coalesce(1) \
     .mode("overwrite") \
     .option("header", True) \
     .csv("./data/gold/sales_by_date")
+
+jdbc_url = "jdbc:postgresql://" + os.getenv("POSTGRES_HOST", "postgres") + ":5432/sales_db"
+jdbc_properties = {
+    "user": os.getenv("POSTGRES_USER", "postgres"),
+    "password": os.getenv("POSTGRES_PASSWORD", "mysecretpassword"),
+    "driver": "org.postgresql.Driver"
+}
+
+sales_by_date_db = sales_by_date.select(
+    col("Order Date").alias("order_date"),
+    col("Total Sales").alias("total_sales"),
+    col("Total Profit").alias("total_profit"),
+    col("Total Quantity").alias("total_quantity")
+)
+
+sales_by_date_db.write \
+    .format("jdbc") \
+    .mode("overwrite") \
+    .option("url", jdbc_url) \
+    .options(**jdbc_properties) \
+    .option("dbtable", "gold_sales_by_date") \
+    .save()
+
+print("Loaded sales_by_date into Postgres table gold_sales_by_date")
 
 # --------------------------------------------
 # Gold Report 2 - Sales by Product

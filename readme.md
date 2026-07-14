@@ -123,3 +123,22 @@ End
 Dokcer installtion command
 
 docker run -it --name pipeline_test -v "${PWD}:/opt/spark/work" -w /opt/spark/work apache/spark:3.5.0 bash
+
+Docker verification commands
+
+# Start the Postgres and Spark containers
+docker compose up -d --build postgres spark
+
+# Run the ETL job inside the Spark container
+docker exec -i ETL_Spark python /opt/spark/work/src/main.py
+
+# Check that the Postgres table exists
+docker exec -i ETL_Postgres psql -U postgres -d sales_db -c "\dt"
+
+# Query the uploaded data from Spark
+docker exec -i ETL_Postgres psql -U postgres -d sales_db -c "SELECT * FROM gold_sales_by_date LIMIT 10;"
+
+# Confirm the row count
+docker exec -i ETL_Postgres psql -U postgres -d sales_db -c "SELECT COUNT(*) AS rows_from_spark FROM gold_sales_by_date;"
+
+# If pgAdmin is connecting from your machine, use host localhost and port 55432 instead of 5432."
