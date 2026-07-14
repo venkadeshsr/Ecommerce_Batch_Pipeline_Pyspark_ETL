@@ -1,144 +1,61 @@
-Installation Guide
+# Ecommerce Batch Pipeline with PySpark and Airflow
 
-Python is mandatory
+This project demonstrates a production-style batch ETL pipeline for ecommerce sales data. It generates raw sales files, processes them with Apache Spark, stores curated data in PostgreSQL, and orchestrates the workflow with Apache Airflow.
 
-after python installing install pyspar
+## What the project does
 
-python -m pip install pyspark on your terminal
+- Generates synthetic ecommerce sales data
+- Ingests raw CSV files into a Spark-based pipeline
+- Builds bronze, silver, and gold layers
+- Loads reporting tables into PostgreSQL
+- Archives raw files and generated reports
+- Schedules daily execution with Airflow
 
------
+## Architecture overview
 
-Architecture layer
+Raw CSV -> Bronze -> Silver -> Gold -> PostgreSQL
 
-Raw CSV
-   │
-   ▼
-Read CSV (PySpark)
-   │
-   ▼
-Bronze Layer
-   │
-   ▼
-Data Cleaning
-   │
-   ├── Remove duplicates
-   ├── Handle nulls
-   ├── Data type conversion
-   ├── Data validation
-   └── Add Year/Month/Quarter
-   │
-   ▼
-Silver Layer (sales_clean)
-   │
-   ├── Sales by Date
-   ├── Sales by Product
-   ├── Sales by Category
-   ├── Sales by Region
-   ├── Product × Region
-   ├── Category × Region
-   ├── Monthly Sales
-   ├── Monthly Category Sales
-   ├── Monthly Product Sales
-   └── KPI Summary
-   │
-   ▼
-Gold Layer (Parquet/Delta)
+## Tech stack
 
-//////
+- Python
+- Apache Spark
+- PostgreSQL
+- Apache Airflow
+- Docker
+- pgAdmin
 
-In a real PySpark project
+## Project structure
 
-A common pipeline is:
+- src/: Spark ETL entrypoints and job modules
+- dags/: Airflow DAG definitions
+- data/: raw, processed, and archived data
+- docs/: detailed documentation for each tool
+- postgress/: PostgreSQL initialization scripts
 
-1 Bronze table (raw data)
-1 Silver table (cleaned and enriched data)
-8–10 Gold tables (aggregated reporting datasets)
+## Quick start
 
-This is a standard ETL design used in data engineering projects, where the Silver layer acts as the source for multiple reporting-ready Gold datasets.
+1. Start the containers
+   ```bash
+   docker compose up -d --build
+   ```
+2. Run the ETL workflow
+   ```bash
+   docker exec -i ETL_Spark python /opt/spark/work/src/main.py
+   ```
+3. Open Airflow at http://localhost:8080
 
-///
+## Documentation
 
-End to End flow : (As per Code)
+- [docs/README.md](docs/README.md)
+- [docs/project_setup.md](docs/project_setup.md)
+- [docs/spark.md](docs/spark.md)
+- [docs/airflow.md](docs/airflow.md)
+- [docs/postgresql.md](docs/postgresql.md)
+- [docs/docker.md](docs/docker.md)
+- [docs/pgadmin.md](docs/pgadmin.md)
 
-orders.csv
-      │
-      ▼
-Read CSV
-      │
-      ▼
-Bronze
-      │
-      ▼
-Clean Data
-      │
-      ▼
-Silver
-      │
-      ├─────────────► Sales by Date
-      │
-      ├─────────────► Sales by Product
-      │
-      ├─────────────► Sales by Category
-      │
-      └─────────────► Sales by Region
-                     │
-                     ▼
-                  Gold Layer
+## Notes
 
-----
-
-Implement Airflow and move on to real time projects
-
-Start
-   │
-   ▼
-Check File Exists
-   │
-   ▼
-Archive Previous Raw File
-   │
-   ▼
-Bronze
-   │
-   ▼
-Data Quality Check
-   │
-   ▼
-Silver
-   │
-   ▼
-Gold
-   │
-   ▼
-Generate Report
-   │
-   ▼
-Send Email Notification
-   │
-   ▼
-End
-
----
-
-Dokcer installtion command
-
-docker run -it --name pipeline_test -v "${PWD}:/opt/spark/work" -w /opt/spark/work apache/spark:3.5.0 bash
-
-Docker verification commands
-
-# Start the Postgres and Spark containers
-docker compose up -d --build postgres spark
-
-# Run the ETL job inside the Spark container
-docker exec -i ETL_Spark python /opt/spark/work/src/main.py
-
-# Check that the Postgres table exists
-docker exec -i ETL_Postgres psql -U postgres -d sales_db -c "\dt"
-
-# Query the uploaded data from Spark
-docker exec -i ETL_Postgres psql -U postgres -d sales_db -c "SELECT * FROM gold_sales_by_date LIMIT 10;"
-
-# Confirm the row count
-docker exec -i ETL_Postgres psql -U postgres -d sales_db -c "SELECT COUNT(*) AS rows_from_spark FROM gold_sales_by_date;"
-
-# If pgAdmin is connecting from your machine, use host localhost and port 55432 instead of 5432."
+- Raw files are archived by day only in the data/archive folder
+- The Airflow DAG is scheduled to run daily at 9:00 AM
+- The Spark pipeline now loads PostgreSQL tables for each reporting dataset instead of relying only on CSV outputs

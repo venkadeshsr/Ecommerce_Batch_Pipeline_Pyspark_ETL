@@ -18,8 +18,6 @@ def build_archive_root(project_root: Path, timestamp: Optional[datetime] = None)
         / run_time.strftime("%Y")
         / run_time.strftime("%m")
         / run_time.strftime("%d")
-        / run_time.strftime("%H")
-        / run_time.strftime("%M")
     )
 
 

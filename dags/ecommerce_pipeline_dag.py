@@ -15,9 +15,9 @@ default_args = {
 with DAG(
     'ecommerce_batch_etl',
     default_args=default_args,
-    description='Testing our PySpark ETL pipeline every 2 minutes',
-    schedule_interval='*/20 * * * *', # Cron expression for "Every 0 minutes"
-    catchup=False,                  # Prevents running historical missed jobs
+    description='Run the PySpark ETL pipeline every morning at 9 AM',
+    schedule_interval='0 9 * * *',
+    catchup=False,
 ) as dag:
 
     generate_sales_data = BashOperator(
