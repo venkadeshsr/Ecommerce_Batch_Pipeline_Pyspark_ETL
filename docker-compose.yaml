@@ -6,7 +6,7 @@ services:
     container_name: ETL_Postgres
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-change_me}
       - POSTGRES_DB=sales_db
     ports:
       - "55432:5432"
@@ -22,7 +22,7 @@ services:
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-change_me}
     volumes:
       - .:/opt/spark/work
     tty: true 

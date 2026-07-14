@@ -20,7 +20,7 @@ def get_jdbc_config() -> Dict[str, str]:
         + os.getenv("POSTGRES_HOST", "postgres")
         + ":5432/sales_db",
         "user": os.getenv("POSTGRES_USER", "postgres"),
-        "password": os.getenv("POSTGRES_PASSWORD", "mysecretpassword"),
+        "password": os.getenv("POSTGRES_PASSWORD", "change_me"),
         "driver": "org.postgresql.Driver",
     }
 

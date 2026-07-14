@@ -9,7 +9,7 @@ Use the following connection details:
 - Port: 55432
 - Database: sales_db
 - User: postgres
-- Password: mysecretpassword
+- Password: your_postgres_password
 
 ## Verify tables
 ```bash

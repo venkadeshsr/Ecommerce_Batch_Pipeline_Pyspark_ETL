@@ -13,7 +13,7 @@ pgAdmin provides a graphical interface for PostgreSQL.
    - Port: 55432
    - Maintenance database: sales_db
    - Username: postgres
-   - Password: mysecretpassword
+   - Password: your_postgres_password
 5. Click Save.
 6. The server will appear in the left panel, and you can expand it to view the database and tables.
 
@@ -22,4 +22,4 @@ pgAdmin provides a graphical interface for PostgreSQL.
 - Port: 55432
 - Database: sales_db
 - User: postgres
-- Password: mysecretpassword
+- Password: your_postgres_password
