@@ -59,3 +59,9 @@ Raw CSV -> Bronze -> Silver -> Gold -> PostgreSQL
 - Raw files are archived by day only in the data/archive folder
 - The Airflow DAG is scheduled to run daily at 9:00 AM
 - The Spark pipeline now loads PostgreSQL tables for each reporting dataset instead of relying only on CSV outputs
+
+## Repository hygiene
+
+- Python bytecode caches such as __pycache__ and pytest artifacts are generated locally and should not be committed
+- The repository uses .gitignore to prevent these files from being tracked
+- Tests are optional and live under the tests folder; they are not required for the ETL runtime
