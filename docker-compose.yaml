@@ -14,7 +14,9 @@ services:
       - etl_network
 
   spark:
-    build: .
+    build:
+      context: ./src
+      dockerfile: Dockerfile
     image: etl_spark:latest
     container_name: ETL_Spark
     environment:
